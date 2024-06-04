@@ -1,0 +1,4 @@
+﻿  Crossword.cpp
+C:\Users\Егор 1\source\repos\Crossword\Crossword.cpp(140,23): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\source\repos\Crossword\Crossword.cpp(183,27): warning C4018: <: несоответствие типов со знаком и без знака
+  Crossword.vcxproj -> C:\Users\Егор 1\source\repos\Crossword\Debug\Crossword.exe
