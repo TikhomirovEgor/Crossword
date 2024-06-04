@@ -130,9 +130,6 @@ struct cell
         num[1] = num0[1];
     }
 
-    ~cell() {
-        //delete[] num;
-    }
     void drawButton() {
         glBegin(GL_POLYGON);
         glColor3f(0, 0.45, 0.9);
@@ -142,13 +139,14 @@ struct cell
         glVertex2f(x, y + height);
         glEnd();
 
-        glColor3f(1, 0.6, 0);
+        glColor3f(0.3, 0.7, 0);
 
         float textX = x + 0.3;
         float textY = y + 0.7;
 
         glRasterPos2f(textX, textY);
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, current);
+        glColor3f(1, 0.6, 0);
         if (num[0] != '*') {
             float textX = x + 0.3;
             float textY = y + 3;
@@ -163,28 +161,7 @@ struct cell
 
         glFlush();
     }
-    void drawButton(int d) {
-        glBegin(GL_POLYGON);
-        glColor3f(0.666, 0.5, 0.9);
-        glVertex2f(x, y);
-        glVertex2f(x + width, y);
-        glVertex2f(x + width, y + height);
-        glVertex2f(x, y + height);
-        glEnd();
 
-        glColor3f(1, 0.9, 0);
-
-        float textX = x + 0.1;
-        float textY = y + 1;
-
-        glRasterPos2f(textX, textY);
-        for (int i = 0; i < sz; ++i) {
-
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ans);
-        }
-
-        glFlush();
-    }
     bool isButtonHovered(Point press) {
         return press.x >= x && press.x <= x + width &&
             press.y >= y && press.y <= y + height;
@@ -208,8 +185,9 @@ struct H {
     static Button cr3;
     static Button to_manu;
     static Button ok;
+    static int cur_id;
 }; std::vector<cell*> H::ce;
-Button H::cr1(20, 50, 11, 5, "crossword 1"), H::cr2(70, 50, 11, 5, "crossword 2"), H::cr3(120, 50, 11, 5, "crossword 3"), H::to_manu(130, 5, 10, 5, "to manu");
+Button H::cr1(20, 50, 11, 5, "crossword 1"), H::cr2(70, 50, 11, 5, "crossword 2"), H::cr3(120, 50, 11, 5, "crossword 3"), H::to_manu(130, 5, 10, 5, "to manu"); int H::cur_id = -1;
 
 std::vector<cell*> cells(const std::vector<std::vector<char>>& fld, const int& s, const int& c) {
     std::vector<cell*> cells;
@@ -258,6 +236,7 @@ void DrawField() {
         for (int i = 0; i < H::ce.size(); ++i) {
             (*H::ce[i]).drawButton();
         }
+
         break;
     }
 
@@ -275,6 +254,13 @@ void display() {
     DrawField();
     glutSwapBuffers();
 
+}
+
+void processNormalKeys(unsigned char key, int x, int y) {
+    if (H::cur_id != -1) {
+        (*H::ce[H::cur_id]).current = key;
+        display();
+    }
 }
 
 void MousePressed(int button, int state, int x, int y) {
@@ -349,6 +335,11 @@ void MousePressed(int button, int state, int x, int y) {
             if (H::to_manu.isButtonHovered(xy)) {
                 currentMenuState = MAIN;
             }
+            for (int i = 0; i < H::ce.size(); ++i) {
+                if ((*H::ce[i]).isButtonHovered(xy)) {
+                    H::cur_id = i;
+                }
+            }
             display();
             break;
         }
@@ -382,6 +373,7 @@ int main(int argc, char** argv)
     glutCreateWindow("crossword");
     init();
     glutDisplayFunc(display);
+    glutKeyboardFunc(processNormalKeys);
     glutMouseFunc(MousePressed);
     glutMainLoop();
 
