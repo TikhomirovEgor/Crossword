@@ -1,6 +1,8 @@
 ﻿  Crossword.cpp
-C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(258,27): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(298,39): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(317,39): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(336,39): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(252,27): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(320,39): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(341,39): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(362,39): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(380,31): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Crossword.cpp(386,31): warning C4018: <: несоответствие типов со знаком и без знака
   Crossword.vcxproj -> C:\Users\Егор 1\Documents\GitHub\Crossword\Crossword\Debug\Crossword.exe

@@ -139,7 +139,7 @@ struct cell
         glVertex2f(x, y + height);
         glEnd();
 
-        glColor3f(0.3, 0.7, 0);
+        glColor3f(0.9, 0.3, 0.4);
 
         float textX = x + 0.3;
         float textY = y + 0.7;
@@ -186,8 +186,12 @@ struct H {
     static Button to_manu;
     static Button ok;
     static int cur_id;
-}; std::vector<cell*> H::ce;
-Button H::cr1(20, 50, 11, 5, "crossword 1"), H::cr2(70, 50, 11, 5, "crossword 2"), H::cr3(120, 50, 11, 5, "crossword 3"), H::to_manu(130, 5, 10, 5, "to manu"); int H::cur_id = -1;
+    static int q;
+    static int p;
+    static int f;
+    static std::vector<std::string> quest;
+}; std::vector<cell*> H::ce; std::vector<std::string> H::quest;
+Button H::cr1(20, 50, 11, 5, "crossword 1"), H::cr2(70, 50, 11, 5, "crossword 2"), H::cr3(120, 50, 11, 5, "crossword 3"), H::to_manu(130, 5, 10, 5, "to manu"), H::ok(70, 50, 5, 5, "OK"); int H::cur_id = -1, H::q = 95, H::p, H::f;
 
 std::vector<cell*> cells(const std::vector<std::vector<char>>& fld, const int& s, const int& c) {
     std::vector<cell*> cells;
@@ -213,6 +217,18 @@ std::vector<cell*> cells(const std::vector<std::vector<char>>& fld, const int& s
     return cells;
 }
 
+void readFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (file.is_open()) {
+        std::string line;
+        while (std::getline(file, line)) {
+            H::quest.push_back(line);
+        }
+        file.close();
+    }
+    H::p = H::quest.size();
+}
+
 void renderBitmapString(float x, float y, void* font, std::string string) {
     glRasterPos2f(x, y);
     for (char c : string) {
@@ -236,7 +252,26 @@ void DrawField() {
         for (int i = 0; i < H::ce.size(); ++i) {
             (*H::ce[i]).drawButton();
         }
-
+        glRasterPos2f(80, H::q);
+        for (const auto& line : H::quest) {
+            for (char c : line) {
+                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
+            }
+            if (H::p > 1) {
+                H::p -= 1;
+                H::q -= 2;
+                glRasterPos2f(80, H::q);
+            }
+            else {
+                H::p = H::quest.size();
+                H::q = 95;
+                glRasterPos2f(80, H::q);
+            }
+        }
+        break;
+    case WIN:
+        renderBitmapString(70, 80, GLUT_BITMAP_TIMES_ROMAN_24, "WIN!");
+        H::ok.drawButton();
         break;
     }
 
@@ -273,6 +308,7 @@ void MousePressed(int button, int state, int x, int y) {
         switch (currentMenuState) {
         case MAIN:
             if (H::cr1.isButtonHovered(xy)) {
+                H::q = 95;
                 std::ifstream fin("crossword_field1.txt");
                 std::vector<std::vector<char>> field;
                 std::string s;
@@ -289,6 +325,8 @@ void MousePressed(int button, int state, int x, int y) {
                 }
                 H::ce = cells(field, st, cl);
                 fin.close();
+                H::quest.clear();
+                readFile("questions1.txt");
                 currentMenuState = PLAY;
             }
             else if (H::cr2.isButtonHovered(xy)) {
@@ -308,6 +346,8 @@ void MousePressed(int button, int state, int x, int y) {
                 }
                 H::ce = cells(field, st, cl);
                 fin.close();
+                H::quest.clear();
+                readFile("questions2.txt");
                 currentMenuState = PLAY;
             }
             else if (H::cr3.isButtonHovered(xy)) {
@@ -327,6 +367,8 @@ void MousePressed(int button, int state, int x, int y) {
                 }
                 H::ce = cells(field, st, cl);
                 fin.close();
+                H::quest.clear();
+                readFile("questions3.txt");
                 currentMenuState = PLAY;
             }
             display();
@@ -339,6 +381,22 @@ void MousePressed(int button, int state, int x, int y) {
                 if ((*H::ce[i]).isButtonHovered(xy)) {
                     H::cur_id = i;
                 }
+            }
+            H::f = 1;
+            for (int i = 0; i < H::ce.size(); ++i) {
+                if ((*H::ce[i]).ans != (*H::ce[i]).current) {
+                    H::f = 0;
+                    break;
+                }
+            }
+            if (H::f == 1) {
+                currentMenuState = WIN;
+            }
+            display();
+            break;
+        case WIN:
+            if (H::ok.isButtonHovered(xy)) {
+                currentMenuState = MAIN;
             }
             display();
             break;
